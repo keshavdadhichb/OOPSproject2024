@@ -1,0 +1,7 @@
+# .gitignore file
+
+# Ignore the vscode config directory
+.vscode/
+
+# Ignore files with extension `.exe`
+*.exe
