@@ -1,4 +1,4 @@
-# gitignore file
+# .gitignore file
 
 # Ignore the vscode config directory
 .vscode/
