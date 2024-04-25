@@ -2,6 +2,7 @@
 #include <regex>
 #include <cstring>
 #include <iomanip>
+#include <vector>
 #include <map>
 
 using namespace std;
@@ -49,6 +50,19 @@ public:
     }
 };
 
+class Cleaner {
+    vector<string> feedbacks;
+public:
+    void addFeedback(string f) {
+        feedbacks.push_back(f);
+    }
+    void printFeedbacks() {
+        for (const string& feedback : feedbacks) { 
+            cout << feedback << endl;
+        }
+    }
+};
+
 void printMenu(string option, string name = "") {
     cout << endl << "************ MENU **************" << endl;
     if (option == "login") {
@@ -93,6 +107,7 @@ void displayTimeSlots(Timeslots day) {
 int main() {
     User curUser; // keeping track of cur user details using an object of the User class
     Timeslots monday, tuesday, wednesday;
+    Cleaner A, B, C;
     int option;
     while (true) {
         // if curUser is empty, proceed with login menu
@@ -234,6 +249,54 @@ int main() {
                     } else {
                         cout << "Returning to main menu" << endl;
                     }
+                }
+            }
+            else if (option == 2) {
+                cout << "Recording a room cleaning completion..." << endl;
+                cout << "Enter day of cleaning (M, T, W): ";
+                char day;
+                cin >> day;
+                while (day != 'M' && day != 'T' && day != 'W') {
+                    cout << "Enter valid day: ";
+                    cin >> day;
+                }
+
+                Timeslots* selectedDay;
+                if (day == 'M') selectedDay = &monday;
+                else if (day == 'T') selectedDay = &tuesday;
+                else if (day == 'W') selectedDay = &wednesday;
+
+                // Check if a slot was booked for the current room
+                if (selectedDay->roomAvailable(curUser.getRoomNo())) {
+                    cout << "No booking found for room " << curUser.getRoomNo() << " on this day." << endl;
+                    cout << "Please make sure your room is booked before marking it as cleaned." << endl;
+                } else {
+                    cout << "Room cleaning for room " << curUser.getRoomNo() << " on ";
+                    if (day == 'M') cout << "Monday";
+                    else if (day == 'T') cout << "Tuesday";
+                    else if (day == 'W') cout << "Wednesday";
+                    cout << " marked as completed." << endl;
+
+                    cout << "Enter cleaner name(A, B, C): ";
+                    char cleanerName;
+                    while (cleanerName != 'A' && cleanerName != 'B' && cleanerName != 'C') {
+                        cout << "Enter valid name: ";
+                        cin >> cleanerName;
+                    }
+
+                    Cleaner* cleaner;
+                    if (cleanerName == 'A') cleaner = &A;
+                    else if (cleanerName == 'B') cleaner = &B;
+                    else if (cleanerName == 'C') cleaner = &C;
+
+                    // Get feedback from the user
+                    cout << "Please provide your feedback about the cleaning service: ";
+                    string userFeedback;
+                    cin.ignore();
+                    getline(cin, userFeedback);
+
+                    cleaner->addFeedback(userFeedback);
+                    cout << "Thank you for your feedback!" << endl;
                 }
             }
             else if (option == 3) {
