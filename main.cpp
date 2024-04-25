@@ -57,6 +57,10 @@ public:
         feedbacks.push_back(f);
     }
     void printFeedbacks() {
+        if (feedbacks.size() == 0) {
+            cout << "No feedbacks" << endl;
+            return;
+        }
         for (const string& feedback : feedbacks) { 
             cout << feedback << endl;
         }
@@ -73,7 +77,8 @@ void printMenu(string option, string name = "") {
        
         cout << "1. Register for room cleaning" << endl;
         cout << "2. Record completion of room cleaning" << endl;
-        cout << "3. Logout" << endl;
+        cout << "3. View cleaner details" << endl;
+        cout << "4. Logout" << endl;
     } else { 
         cout << "Menu not found" << endl;
     }
@@ -151,7 +156,7 @@ int main() {
             printMenu("main", curUser.getName());
             cout << "Enter option: ";
             cin >> option;
-            while (option != 1 && option != 2 && option != 3) {
+            while (option != 1 && option != 2 && option != 3 && option != 4) {
                 cout << "Enter valid option: ";
                 cin >> option;
             };
@@ -279,6 +284,7 @@ int main() {
 
                     cout << "Enter cleaner name(A, B, C): ";
                     char cleanerName;
+                    cin >> cleanerName;
                     while (cleanerName != 'A' && cleanerName != 'B' && cleanerName != 'C') {
                         cout << "Enter valid name: ";
                         cin >> cleanerName;
@@ -300,6 +306,23 @@ int main() {
                 }
             }
             else if (option == 3) {
+                cout << "Getting cleaner details" << endl;
+                cout << "Enter cleaner name: ";
+                char cleanerName;
+                cin >> cleanerName;
+                while (cleanerName != 'A' && cleanerName != 'B' && cleanerName != 'C') {
+                        cout << "Enter valid name: ";
+                    cin >> cleanerName;
+                }
+
+                Cleaner* cleaner;
+                if (cleanerName == 'A') cleaner = &A;
+                else if (cleanerName == 'B') cleaner = &B;
+                else if (cleanerName == 'C') cleaner = &C;
+
+                cout << "Cleaner " << cleanerName << " feedbacks: " << endl;
+                cleaner->printFeedbacks();
+            } else if (option == 4) {
                 curUser = User();
                 cout << "Successfully logged out" << endl << endl;
             }
